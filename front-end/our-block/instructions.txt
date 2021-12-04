@@ -1,0 +1,5 @@
+1. create react app optional typescript, extra optional add redux template if needed
+2. install extra dependencies axios react-router-dom @mui/material @emotion/react @emotion/styled @mui/icons-material
+3. add robot types to index.html in public for material-ui <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+4. add css baseline provider to root index.tsx
+5. happy coding
