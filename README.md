@@ -1,6 +1,15 @@
-## Our Bloc App created by Alan Contreras, full-stack implementation
+# Our Bloc App created by Alan Contreras, full-stack implementation
 
 Contact Alan: [email](mailto:alanrcontrerasm@gmail.com)
+
+## Tech stack
+
+### Front-End
+#### React
+#### Typescript
+#### Redux Toolkit
+#### Material-UI
+
 
 
 In the project directory, you can run:
