@@ -5,6 +5,7 @@ import Header from './components/Header';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useAppSelector } from './app/hooks';
 import {selectTheme} from './features/theme/themeSlice';
+import { Map } from './components/Map';
 
 
 const App:FC = ():ReactElement => {
@@ -19,11 +20,12 @@ const App:FC = ():ReactElement => {
 
 
   return (
-    <>
+    <div style={{height:"100vh", display: "flex", flexDirection: "column", minHeight: "100vh"}}> 
       <ThemeProvider theme={theme}>
         <Header />
+        <Map/>
       </ThemeProvider>
-    </>
+    </div>
   );
 }
 

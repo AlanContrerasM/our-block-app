@@ -13,7 +13,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <CssBaseline> 
-          <App/>
+          <App />
         </CssBaseline>
     </Provider>
   </React.StrictMode>,

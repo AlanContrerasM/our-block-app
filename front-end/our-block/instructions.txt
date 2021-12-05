@@ -1,5 +1,11 @@
 1. create react app optional typescript, extra optional add redux template if needed
-2. install extra dependencies axios react-router-dom @mui/material @emotion/react @emotion/styled @mui/icons-material
+2. install extra dependencies axios react-router-dom dotenv @mui/material @emotion/react @emotion/styled @mui/icons-material
 3. add robot types to index.html in public for material-ui <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
 4. add css baseline provider to root index.tsx
-5. happy coding
+5. add .env variables like keys, and import to config index
+6. add optionals like mapbox-gl @types/mapbox-gl @mapbox/mapbox-gl-geocoder , 
+and add css to head link on index.html <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+6. happy coding
+
+

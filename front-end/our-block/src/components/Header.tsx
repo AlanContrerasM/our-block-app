@@ -11,6 +11,10 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { useAppSelector, useAppDispatch} from '../app/hooks';
+import {selectTheme, toggle} from '../features/theme/themeSlice';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -33,6 +37,10 @@ const Header = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  //for dark mode toggling
+  const dark = useAppSelector(selectTheme);
+  const dispatch = useAppDispatch();
 
   return (
     <AppBar position="static">
@@ -104,6 +112,10 @@ const Header = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
+              {/* switch button */}
+            <IconButton sx={{ ml: 1 }} onClick={()=>dispatch(toggle())} color="inherit">
+                    {!dark ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
