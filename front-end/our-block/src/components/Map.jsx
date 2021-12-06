@@ -20,6 +20,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import Box from '@mui/material/Box';
 import { Paper } from '@mui/material';
+import { EventQuickDialog } from './EventQuickDialog';
  
 mapboxgl.accessToken = 'pk.eyJ1IjoiYWxhbnJjb250cmVyYXNtIiwiYSI6ImNrd3NmZ29icDE1dXcydW84aGI4ZHZiajkifQ.z-xzhlSEjPgpRp-HEMOCNA';
  
@@ -83,6 +84,28 @@ const dummyEventData = [
             username: "user1"
         }
     },
+    {
+        _id: "3",
+        title: "title3",
+        description: "description",
+        category: "business",
+        coordinates: [-123.13261,49.2878],
+        creator: {
+            _id: "user1",
+            username: "user1"
+        }
+    },
+    {
+        _id: "3",
+        title: "title3",
+        description: "description",
+        category: "community",
+        coordinates: [-123.1327,49.2878],
+        creator: {
+            _id: "user1",
+            username: "user1"
+        }
+    },
 ]
 
 export  const Map = () => {
@@ -94,6 +117,8 @@ export  const Map = () => {
     const [loading, setLoading] = useState(false);
     const [savingMarker, setSavingMarker] = useState(false);
     const [open, setOpen] = useState(false);
+    const [openQuickDialog, setOpenQuickDialog] = useState(false);
+    const [dataQuickDialog, setdataQuickDialog] = useState(dummyEventData[0])
     const [newMarker, setNewMarker] = useState(null);
     const [newMarkerData, setNewMarkerData] = useState({
         title: "",
@@ -163,24 +188,48 @@ export  const Map = () => {
         dummyEventData.forEach(event=>{
 
             const placeholder = document.createElement('div');
+            
             ReactDOM.render(
                 <ThemeProvider theme={theme}>
                     <Paper sx={{p:3, bgcolor: 'background.default'}}>
                         <DialogTitle>{event.title.slice(0,30) + "..."}</DialogTitle>
                             <DialogContent>
                             <DialogContentText>
-                                {event.description.slice(0,30) + "..."}
+                                {event.category[0].toUpperCase()  + event.category.split("-").join(" ").slice(1) + ": " + event.description.slice(0,30) + "..."}
                             </DialogContentText>
                         </DialogContent>
-                        <Button fullWidth variant="contained" onClick={console.log(event._id)}>Place Here!</Button>
+                        <Button fullWidth variant="contained" onClick={()=>{setOpenQuickDialog(true); setdataQuickDialog(event)}}>Place Here!</Button>
                     </Paper>
             </ThemeProvider>, placeholder);
 
             //create Popup
-        
+            let color = "#3FB1CE"
+            switch(event.category){
+                case("personal"):
+                    color = "#3FB1CE"
+                    break;
+                case("sports"):
+                    color = "#ff3d00"
+                    break;
+                case("big-event"):
+                    color = "#651fff"
+                    break;
+                case("community"):
+                    color = "#00e676"
+                    break;
+                case("night-life"):
+                    color = "#ffea00"
+                    break;
+                case("business"):
+                    color = "#009688"
+                    break;
+                default:
+                    break;
+
+            }
 
         
-            const marker = new mapboxgl.Marker(<AddLocationAltIcon fontSize="large"/>)
+            const marker = new mapboxgl.Marker({color: color})
                 .setLngLat(event.coordinates)
                 // .setPopup(new mapboxgl.Popup({closeOnClick: false, closeButton: false}).setHTML("<h1>Move Me</h1>"))
                 .setPopup(new mapboxgl.Popup({closeButton: false}).setDOMContent(placeholder)) 
@@ -203,7 +252,7 @@ export  const Map = () => {
         ReactDOM.render(
             <ThemeProvider theme={theme}>
                 <Paper sx={{p:3, bgcolor: 'background.default'}}>
-                    <DialogTitle>Create Event</DialogTitle>
+                    <DialogTitle>Your Event</DialogTitle>
                     <Button fullWidth variant="contained" onClick={handleClickOpen}>Place Here!</Button>
                 </Paper>
         </ThemeProvider>, placeholder);
@@ -240,19 +289,6 @@ export  const Map = () => {
     }
 
 
-    const handleClickOpen = () => {
-        setOpen(true);
-      };
-    
-    const handleClose = () => {
-        setOpen(false);
-    };
-    const handleCancel = () =>{
-        setLoading(false);
-        newMarker.remove();
-        setOpen(false);
-    }
-
     const saveNewMarker = (e) => {
         if(e.target.form.reportValidity()){
             console.log(newMarkerData)
@@ -270,7 +306,22 @@ export  const Map = () => {
                 category: "personal"
                 //creator will be provided with the api middleware
             })
+            setOpen(false);
         }
+    }
+
+    const handleClickOpen = () => {
+        setOpen(true);
+      };
+    
+    const handleClose = () => {
+        setOpen(false);
+        setOpenQuickDialog(false);
+    };
+    const handleCancel = () =>{
+        setLoading(false);
+        newMarker.remove();
+        setOpen(false);
     }
 
 
@@ -343,7 +394,7 @@ export  const Map = () => {
                         <MenuItem value={"personal"} selected>Personal</MenuItem>
                         <MenuItem value={"sports"}>Sports</MenuItem>
                         <MenuItem value={"business"}>Business</MenuItem>
-                        <MenuItem value={"night-life"}>Business</MenuItem>
+                        <MenuItem value={"night-life"}>Night Life</MenuItem>
                         <MenuItem value={"big-event"}>Big Event</MenuItem>
                         <MenuItem value={"community"}>Community</MenuItem>
                     </Select>
@@ -363,7 +414,7 @@ export  const Map = () => {
                 </DialogContent>
             </Dialog>
 
-
+            <EventQuickDialog open={openQuickDialog} onClose={handleClose} eventData={dataQuickDialog}/>
         </div>
     );
 }

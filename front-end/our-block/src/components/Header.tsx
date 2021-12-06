@@ -16,8 +16,8 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useAppSelector, useAppDispatch} from '../app/hooks';
 import {selectTheme, toggle} from '../features/theme/themeSlice';
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['All Events', 'My Events', 'Saved Events'];
+const settings = ['Profile', 'Logout'];
 
 const Header = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -52,7 +52,7 @@ const Header = () => {
             component="div"
             sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
           >
-            LOGO
+            AroundTheBlock
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -97,7 +97,7 @@ const Header = () => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
           >
-            LOGO
+            AroundTheBlock
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
@@ -118,7 +118,7 @@ const Header = () => {
             </IconButton>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Remy Sharp" src="" > U </Avatar>
               </IconButton>
             </Tooltip>
             <Menu
