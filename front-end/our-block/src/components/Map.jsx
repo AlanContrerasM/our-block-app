@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
 import mapboxgl from 'mapbox-gl'; 
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { useAppSelector } from '../app/hooks';
@@ -12,12 +13,13 @@ import TextField from '@mui/material/TextField';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import Box from '@mui/material/Box';
+import { Paper } from '@mui/material';
  
 mapboxgl.accessToken = 'pk.eyJ1IjoiYWxhbnJjb250cmVyYXNtIiwiYSI6ImNrd3NmZ29icDE1dXcydW84aGI4ZHZiajkifQ.z-xzhlSEjPgpRp-HEMOCNA';
  
@@ -47,7 +49,41 @@ const styles = {
         },
   };
 
-
+const dummyEventData = [
+    {
+        _id: "1",
+        title: "title1",
+        description: "description",
+        category: "personal",
+        coordinates: [-123.1328,49.2871],
+        creator: {
+            _id: "user1",
+            username: "user1"
+        }
+    },
+    {
+        _id: "2",
+        title: "title2",
+        description: "description",
+        category: "sports",
+        coordinates: [-123.1329,49.28711],
+        creator: {
+            _id: "user1",
+            username: "user1"
+        }
+    },
+    {
+        _id: "3",
+        title: "title3",
+        description: "description",
+        category: "night-life",
+        coordinates: [-123.13285,49.2878],
+        creator: {
+            _id: "user1",
+            username: "user1"
+        }
+    },
+]
 
 export  const Map = () => {
     const mapContainer = useRef(null);
@@ -56,7 +92,25 @@ export  const Map = () => {
     const [lat, setLat] = useState(49.2871);
     const [zoom, setZoom] = useState(14.22);
     const [loading, setLoading] = useState(false);
-    const [open, setOpen] = React.useState(false);
+    const [savingMarker, setSavingMarker] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [newMarker, setNewMarker] = useState(null);
+    const [newMarkerData, setNewMarkerData] = useState({
+        title: "",
+        description: "",
+        coordinates: [],
+        category: "personal"
+        //creator will be provided with the api middleware
+    })
+
+    //theme provider for popups
+    const dark = useAppSelector(selectTheme);
+
+    const theme = createTheme({
+      palette: {
+        mode: dark ? 'dark' : 'light', // Switching the dark mode 
+      },
+    });
 
    
     
@@ -92,31 +146,90 @@ export  const Map = () => {
             setZoom(map.current.getZoom().toFixed(2));
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        generateEventMarkers();
     }, []);
     
     //darkmode controller for map
-    const dark = useAppSelector(selectTheme);
+    
     useEffect(()=>{
         if (!map.current) return; 
         !dark ? map.current.setStyle('mapbox://styles/mapbox/streets-v11'): map.current.setStyle('mapbox://styles/mapbox/dark-v10'); 
     }, [dark])
     
+
+    //create markers for existing events
+    const generateEventMarkers = () =>{
+        dummyEventData.forEach(event=>{
+
+            const placeholder = document.createElement('div');
+            ReactDOM.render(
+                <ThemeProvider theme={theme}>
+                    <Paper sx={{p:3, bgcolor: 'background.default'}}>
+                        <DialogTitle>{event.title.slice(0,30) + "..."}</DialogTitle>
+                            <DialogContent>
+                            <DialogContentText>
+                                {event.description.slice(0,30) + "..."}
+                            </DialogContentText>
+                        </DialogContent>
+                        <Button fullWidth variant="contained" onClick={console.log(event._id)}>Place Here!</Button>
+                    </Paper>
+            </ThemeProvider>, placeholder);
+
+            //create Popup
+        
+
+        
+            const marker = new mapboxgl.Marker(<AddLocationAltIcon fontSize="large"/>)
+                .setLngLat(event.coordinates)
+                // .setPopup(new mapboxgl.Popup({closeOnClick: false, closeButton: false}).setHTML("<h1>Move Me</h1>"))
+                .setPopup(new mapboxgl.Popup({closeButton: false}).setDOMContent(placeholder)) 
+                .addTo(map.current)
+                .togglePopup();
+            
+            marker.getElement().style.cursor = "pointer";
+            marker.getPopup().getElement().lastChild.style.padding = "0px";
+            marker.togglePopup();
+            
+
+        })
+    }
+
+
     //create new Draggable marker for when trying to add new Event
     const addNewMarker = (e) => {
         setLoading(true);
-        // console.log(e.target.textContent);
+        const placeholder = document.createElement('div');
+        ReactDOM.render(
+            <ThemeProvider theme={theme}>
+                <Paper sx={{p:3, bgcolor: 'background.default'}}>
+                    <DialogTitle>Create Event</DialogTitle>
+                    <Button fullWidth variant="contained" onClick={handleClickOpen}>Place Here!</Button>
+                </Paper>
+        </ThemeProvider>, placeholder);
+
+        //create Popup
+        
+
+        
         const marker = new mapboxgl.Marker({
             draggable: true
             })
             .setLngLat([lng, lat])
-            .setPopup(new mapboxgl.Popup({closeOnClick: false, closeButton: false}).setHTML("<h1>Move Me</h1>"))
+            // .setPopup(new mapboxgl.Popup({closeOnClick: false, closeButton: false}).setHTML("<h1>Move Me</h1>"))
+            .setPopup(new mapboxgl.Popup({closeOnClick: false, closeButton: false}).setDOMContent(placeholder)) 
             .addTo(map.current)
             .togglePopup();
-             
+        
+        marker.getElement().style.cursor = "pointer";
+        marker.getPopup().getElement().lastChild.style.padding = "0px";
+        setNewMarker(marker);
+        setNewMarkerData({...newMarkerData, coordinates: [lng,lat]})
+
         function onDragEnd() {
             const {lng, lat} = marker.getLngLat();
             marker.togglePopup();
-            handleClickOpen();
+            setNewMarkerData({...newMarkerData, coordinates: [lng,lat]})
         }
 
 
@@ -135,8 +248,29 @@ export  const Map = () => {
         setOpen(false);
     };
     const handleCancel = () =>{
-        //use navigate
+        setLoading(false);
+        newMarker.remove();
         setOpen(false);
+    }
+
+    const saveNewMarker = (e) => {
+        if(e.target.form.reportValidity()){
+            console.log(newMarkerData)
+            setSavingMarker(true);
+            //post data to database
+
+            setSavingMarker(false);
+            setLoading(false);
+            //empty Dialog if someone wants to create new marker
+            newMarker.remove();
+            setNewMarkerData({
+                title: "",
+                description: "",
+                coordinates: [],
+                category: "personal"
+                //creator will be provided with the api middleware
+            })
+        }
     }
 
 
@@ -162,51 +296,74 @@ export  const Map = () => {
             </Box>
 
 
-        <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Create Event</DialogTitle>
-            <DialogContent>
-            <DialogContentText>
-                Please provide the details for your event:
-            </DialogContentText>
-            <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label="Email Address"
-                type="email"
-                fullWidth
-                variant="standard"
-            />
-            <FormControl fullWidth>
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    label="title"
-                    type="email"
-                    fullWidth
-                    variant="standard"
-                />
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Create Event</DialogTitle>
+                <DialogContent>
+                <DialogContentText>
+                    Please provide the details for your event:
+                </DialogContentText>
                 
-                <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    // value={age}
-                    label="Age"
-                    // onChange={handleChange}
-                >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-            </FormControl>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose} color="error">Cancel</Button>
-                <Button onClick={handleClose}>Keep placing my event</Button>
-                <Button onClick={handleClose}>Subscribe</Button>
-            </DialogActions>
-        </Dialog>
+                <FormControl fullWidth component="form">
+                    <TextField
+                        
+                        margin="dense"
+                        id="title"
+                        label="Title"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        value={newMarkerData.title}
+                        onChange={(e)=>setNewMarkerData({...newMarkerData, title: e.target.value})}
+                        required
+                    />
+                    <TextField
+                        
+                        margin="dense"
+                        id="description"
+                        label="Description"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        value={newMarkerData.description}
+                        onChange={(e)=>setNewMarkerData({...newMarkerData, description: e.target.value})}
+                        required
+                    />
+                    <DialogContentText>
+                        Please select the category for your event:
+                    </DialogContentText>
+                    
+                    <Select
+                        label="Event Category"
+                        placeholder="Select category event"
+                        id="category"
+                        value={newMarkerData.category}
+                        onChange={(e)=>setNewMarkerData({...newMarkerData, category: e.target.value})}
+                        required
+                    >
+                        <MenuItem value={"personal"} selected>Personal</MenuItem>
+                        <MenuItem value={"sports"}>Sports</MenuItem>
+                        <MenuItem value={"business"}>Business</MenuItem>
+                        <MenuItem value={"night-life"}>Business</MenuItem>
+                        <MenuItem value={"big-event"}>Big Event</MenuItem>
+                        <MenuItem value={"community"}>Community</MenuItem>
+                    </Select>
+                    <DialogActions>
+                        <Button disabled={savingMarker} onClick={handleCancel} color="error">Cancel</Button>
+                        <Button disabled={savingMarker} onClick={handleClose}>Keep placing my event</Button>
+                        <LoadingButton 
+                            onClick={(e)=>saveNewMarker(e)}
+                            startIcon={<AddLocationAltIcon fontSize="large"/>}
+                            loading={savingMarker}
+                            loadingPosition="start"//otherwise end
+                            variant="contained"
+                            size="medium"
+                        >Save Event</LoadingButton>
+                    </DialogActions>
+                </FormControl>
+                </DialogContent>
+            </Dialog>
+
+
         </div>
     );
 }
