@@ -60,7 +60,8 @@ const dummyEventData = [
         creator: {
             _id: "user1",
             username: "user1"
-        }
+        },
+        image: ""//from pixabay created by database
     },
     {
         _id: "2",

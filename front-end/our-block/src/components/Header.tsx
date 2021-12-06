@@ -19,6 +19,12 @@ import {selectTheme, toggle} from '../features/theme/themeSlice';
 const pages = ['All Events', 'My Events', 'Saved Events'];
 const settings = ['Profile', 'Logout'];
 
+//Todo: react router dom functionality, multiple pages, wrap everything on a paper so everything gets a theme
+//start backend, database, make request for image from pixabay and key from back env, also the key for the map stored on backend env. 
+// create store for user, event.
+//depending on user login change header, options from right side.
+//finish
+
 const Header = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
