@@ -5,16 +5,19 @@ import App from './App';
 import { store } from './app/store';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
-import CssBaseline from '@mui/material/CssBaseline';
+import {BrowserRouter} from 'react-router-dom';
+import { Paper } from '@mui/material';
 
 
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <CssBaseline> 
-          <App />
-        </CssBaseline>
+          <BrowserRouter>
+            <Paper>
+              <App />
+            </Paper>
+          </BrowserRouter>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

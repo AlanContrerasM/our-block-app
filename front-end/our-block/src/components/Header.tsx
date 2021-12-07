@@ -15,9 +15,16 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useAppSelector, useAppDispatch} from '../app/hooks';
 import {selectTheme, toggle} from '../features/theme/themeSlice';
+import {selectUser} from '../features/user/userSlice';
+import { Link, useNavigate} from 'react-router-dom';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-const pages = ['All Events', 'My Events', 'Saved Events'];
-const settings = ['Profile', 'Logout'];
+
+
+const pages = [{title: 'All Events', link: "/events/AllEvents"}, 
+              {title: 'My Events', link: "/events/MyEvents"}];
+const settings = [{title: 'Log out', link: "/profile/logout"}];
+
 
 //Todo: react router dom functionality, multiple pages, wrap everything on a paper so everything gets a theme
 //start backend, database, make request for image from pixabay and key from back env, also the key for the map stored on backend env. 
@@ -48,18 +55,30 @@ const Header = () => {
   const dark = useAppSelector(selectTheme);
   const dispatch = useAppDispatch();
 
+  //for user
+  const user = useAppSelector(selectUser);
+
+  const navigate = useNavigate();
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+          
+
           <Typography
             variant="h6"
             noWrap
-            component="div"
+            component={Link}
+            to='/'
+            style={{ textDecoration: 'none' }}
+            color='inherit'
             sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
+
           >
             AroundTheBlock
           </Typography>
+          
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -91,16 +110,25 @@ const Header = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.title} onClick={handleCloseNavMenu}>
+                  <Typography 
+                  textAlign="center"
+                  component={Link}
+                  to={page.link}
+                  style={{ textDecoration: 'none' }}
+                  color='inherit'
+                  >{page.title}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
           <Typography
             variant="h6"
-            noWrap
-            component="div"
+            noWrap       
+            component={Link}
+            to='/'
+            style={{ textDecoration: 'none' }}
+            color='inherit'
             sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
           >
             AroundTheBlock
@@ -108,11 +136,15 @@ const Header = () => {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                component={Link}
+                to={page.link}
+                style={{ textDecoration: 'none' }}
+                color='inherit'
+                key={page.title}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                {page.title}
               </Button>
             ))}
           </Box>
@@ -122,9 +154,11 @@ const Header = () => {
             <IconButton sx={{ ml: 1 }} onClick={()=>dispatch(toggle())} color="inherit">
                     {!dark ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
-            <Tooltip title="Open settings">
+
+            {user.loggedIn ?
+              (<><Tooltip title="">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="" > U </Avatar>
+                <Avatar alt="Remy Sharp" src="" > {user.username[0].toUpperCase()} </Avatar>
               </IconButton>
             </Tooltip>
             <Menu
@@ -144,11 +178,30 @@ const Header = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem key={setting.title} onClick={handleCloseNavMenu}
+                component={Link}
+                  to={setting.link}
+                  style={{ textDecoration: 'none' }}
+                  color='inherit'
+                >
+                  <Typography textAlign="center">{setting.title}</Typography>
                 </MenuItem>
               ))}
-            </Menu>
+            </Menu>  </>)
+            
+            :
+                (<>
+                  <Tooltip title="Sign In">
+              <IconButton onClick={()=>{navigate('/profile/signin')}} sx={{ p: 0 }}>
+              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                <LockOutlinedIcon />
+              </Avatar>
+              </IconButton>
+            </Tooltip>
+            
+                </>)
+          }
+            
           </Box>
         </Toolbar>
       </Container>

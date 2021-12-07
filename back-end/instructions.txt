@@ -1,0 +1,15 @@
+npm i express consola jsonwebtoken passport passport-jwt cors dotenv mongoose bcryptjs cookie-parser
+//create proper folder structures middleware, config, models, routes, utils
+//create new file in config index.js, add a require('dotenv'); and export env 
+//create the env file and add info
+//create or copy a .gitignore
+//continue editing main index.js, create startApp function and initializing stuff
+//create file User.js on models dir and start with the schema
+//create file users.js on dir routes, routes are plural, models are singular, and create routes
+// 1. add router middleware to main index.js
+//create an Auth.js file on the utils dir, create the registration functions
+//now add it to your routes
+//create a middleware file called passport.js
+//2. go to main index and add passport stuff
+//3. add passport to auth
+//continue creating the routes inside users routes.

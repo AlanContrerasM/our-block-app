@@ -174,6 +174,7 @@ export  const Map = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
         generateEventMarkers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     
     //darkmode controller for map
@@ -348,7 +349,11 @@ export  const Map = () => {
             </Box>
 
 
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={open}  onClose={(event, reason) => {
+                    if (reason !== 'backdropClick') {
+                        handleClose();
+                    }
+                }}>
                 <DialogTitle>Create Event</DialogTitle>
                 <DialogContent>
                 <DialogContentText>
