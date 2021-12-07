@@ -2,6 +2,18 @@
 
 Contact Alan: [email](mailto:alanrcontrerasm@gmail.com)
 
+#### To run clone the project
+###### `npm install` on the root folder for the backend
+###### `cd front-end/our-block`  and then `npm install`
+###### cd into root folder and run `npm run dev`
+###### likewise you can run each node separately with nodemon and npm start
+
+###### for database the connection url is inside the .env variables in case you need to change it. 
+######  include theres an events file on root folder if you want to import it into database. 
+###### But honestly just create some events, its fun!
+
+
+
 ## Tech stack
 
 ### Front-End
@@ -9,6 +21,7 @@ Contact Alan: [email](mailto:alanrcontrerasm@gmail.com)
 #### Typescript
 #### Redux Toolkit
 #### Material-UI
+#### MAPBOX GL JS
 
 ### Back-End
 #### MongoDB
