@@ -52,23 +52,24 @@ const userRegister = async (userDets, role, res) => {
 };
 
 
-const userLogin = async (userCreds, role, res) =>{
-    let {username, password} = userCreds;
+const userLogin = async (userCreds, res) =>{
+    let {email, password} = userCreds;
     //First check if username is in the database
-    const user = await User.findOne({username});
+    const user = await User.findOne({email});
     if(!user){
         return res.status(404).json({
-            message: `Username is not found, invalid login credentials.`,
+            message: `email is not found, invalid login credentials.`,
             success: false
           });
     }
 
-    if(user.role !== role){
-        return res.status(403).json({
-            message: `Please make sure you are logging in from correct portal`,
-            success: false
-          });
-    }
+    //not necessary we could be using authRoles if they wanna access cool parts
+    // if(user.role !== role){
+    //     return res.status(403).json({
+    //         message: `Please make sure you are logging in from correct portal`,
+    //         success: false
+    //       });
+    // }
 
     //user is valid and is logging through correct portal
     //now passw
@@ -89,7 +90,9 @@ const userLogin = async (userCreds, role, res) =>{
 
         let result = {
             username: user.username,
+            name: user.name,
             role: user.role, 
+            events: user.events,
             email: user.email,
             // token: `Bearer ${token}`, 
             expiresIn: 168
@@ -99,7 +102,7 @@ const userLogin = async (userCreds, role, res) =>{
         res.cookie("refreshToken", token, {
             // secure: true,
             httpOnly: true,
-            sameSite: "strict",
+            sameSite: "Strict",
         });
 
         return res.status(200).json({
@@ -155,6 +158,7 @@ const serializeUser = user => {
         email: user.email,
         _id: user._id,
         name: user.name,
+        events: user.events,
         updatedAt: user.updatedAt,
         createdAt: user.createdAt
     }

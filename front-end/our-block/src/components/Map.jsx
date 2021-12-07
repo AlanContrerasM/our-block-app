@@ -17,10 +17,15 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-
 import Box from '@mui/material/Box';
 import { Paper } from '@mui/material';
 import { EventQuickDialog } from './EventQuickDialog';
+import {selectUser} from '../features/user/userSlice';
+import {selectEvents} from '../features/events/eventSlice';
+import { useNavigate} from 'react-router-dom';
+import axios from 'axios';
+
+
  
 mapboxgl.accessToken = 'pk.eyJ1IjoiYWxhbnJjb250cmVyYXNtIiwiYSI6ImNrd3NmZ29icDE1dXcydW84aGI4ZHZiajkifQ.z-xzhlSEjPgpRp-HEMOCNA';
  
@@ -50,64 +55,6 @@ const styles = {
         },
   };
 
-const dummyEventData = [
-    {
-        _id: "1",
-        title: "title1",
-        description: "description",
-        category: "personal",
-        coordinates: [-123.1328,49.2871],
-        creator: {
-            _id: "user1",
-            username: "user1"
-        },
-        image: ""//from pixabay created by database
-    },
-    {
-        _id: "2",
-        title: "title2",
-        description: "description",
-        category: "sports",
-        coordinates: [-123.1329,49.28711],
-        creator: {
-            _id: "user1",
-            username: "user1"
-        }
-    },
-    {
-        _id: "3",
-        title: "title3",
-        description: "description",
-        category: "night-life",
-        coordinates: [-123.13285,49.2878],
-        creator: {
-            _id: "user1",
-            username: "user1"
-        }
-    },
-    {
-        _id: "3",
-        title: "title3",
-        description: "description",
-        category: "business",
-        coordinates: [-123.13261,49.2878],
-        creator: {
-            _id: "user1",
-            username: "user1"
-        }
-    },
-    {
-        _id: "3",
-        title: "title3",
-        description: "description",
-        category: "community",
-        coordinates: [-123.1327,49.2878],
-        creator: {
-            _id: "user1",
-            username: "user1"
-        }
-    },
-]
 
 export  const Map = () => {
     const mapContainer = useRef(null);
@@ -119,7 +66,9 @@ export  const Map = () => {
     const [savingMarker, setSavingMarker] = useState(false);
     const [open, setOpen] = useState(false);
     const [openQuickDialog, setOpenQuickDialog] = useState(false);
-    const [dataQuickDialog, setdataQuickDialog] = useState(dummyEventData[0])
+    const [dataQuickDialog, setdataQuickDialog] = useState({_id: "", title: "", description: "",
+                                                            category: "", url: "https://cdn.pixabay.com/photo/2016/05/24/18/49/suitcase-1412996__340.jpg",
+                                                            coordinates: [-123.1328,49.2871], creator: {_id: "", username: "A"}})
     const [newMarker, setNewMarker] = useState(null);
     const [newMarkerData, setNewMarkerData] = useState({
         title: "",
@@ -131,6 +80,10 @@ export  const Map = () => {
 
     //theme provider for popups
     const dark = useAppSelector(selectTheme);
+    const user = useAppSelector(selectUser);
+    const events = useAppSelector(selectEvents);
+    const navigate = useNavigate();
+
 
     const theme = createTheme({
       palette: {
@@ -173,7 +126,7 @@ export  const Map = () => {
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
-        generateEventMarkers();
+        
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     
@@ -183,11 +136,15 @@ export  const Map = () => {
         if (!map.current) return; 
         !dark ? map.current.setStyle('mapbox://styles/mapbox/streets-v11'): map.current.setStyle('mapbox://styles/mapbox/dark-v10'); 
     }, [dark])
+
+    useEffect(()=>{
+        generateEventMarkers(); 
+    }, [events])
     
 
     //create markers for existing events
     const generateEventMarkers = () =>{
-        dummyEventData.forEach(event=>{
+        events.forEach(event=>{
 
             const placeholder = document.createElement('div');
             
@@ -200,7 +157,7 @@ export  const Map = () => {
                                 {event.category[0].toUpperCase()  + event.category.split("-").join(" ").slice(1) + ": " + event.description.slice(0,30) + "..."}
                             </DialogContentText>
                         </DialogContent>
-                        <Button fullWidth variant="contained" onClick={()=>{setOpenQuickDialog(true); setdataQuickDialog(event)}}>Place Here!</Button>
+                        <Button fullWidth variant="contained" onClick={()=>{setOpenQuickDialog(true); setdataQuickDialog(event)}}>Show me more!</Button>
                     </Paper>
             </ThemeProvider>, placeholder);
 
@@ -291,25 +248,73 @@ export  const Map = () => {
     }
 
 
-    const saveNewMarker = (e) => {
-        if(e.target.form.reportValidity()){
-            console.log(newMarkerData)
-            setSavingMarker(true);
-            //post data to database
+    const saveNewMarker = async (e) => {
+        
+       
+            
+        setSavingMarker(true);
+        //post data to database
+        let url = "";
+        switch(newMarkerData.category){
+            case("personal"):
+                url = "https://cdn.pixabay.com/photo/2016/05/24/18/49/suitcase-1412996__340.jpg"
+                break;
+            case("sports"):
+                url = "https://cdn.pixabay.com/photo/2014/10/22/17/25/stretching-498256__340.jpg"
+                break;
+            case("big-event"):
+                url = "https://cdn.pixabay.com/photo/2016/11/29/06/17/audience-1867754__340.jpg"
+                break;
+            case("community"):
+                url = "https://cdn.pixabay.com/photo/2019/10/06/10/03/team-4529717__340.jpg"
+                break;
+            case("night-life"):
+                url = "https://cdn.pixabay.com/photo/2016/12/10/06/17/singapore-1896764__340.jpg"
+                break;
+            case("business"):
+                url = "https://cdn.pixabay.com/photo/2017/12/26/09/15/woman-3040029__340.jpg"
+                break;
+            default:
+                url = "https://cdn.pixabay.com/photo/2016/05/24/18/49/suitcase-1412996__340.jpg"
+                break;
 
-            setSavingMarker(false);
-            setLoading(false);
-            //empty Dialog if someone wants to create new marker
-            newMarker.remove();
-            setNewMarkerData({
-                title: "",
-                description: "",
-                coordinates: [],
-                category: "personal"
-                //creator will be provided with the api middleware
-            })
-            setOpen(false);
         }
+        const newEvent = {
+            ...newMarkerData, url: url
+        }
+        console.log(newEvent)
+
+        try{
+            const resp = await axios.post("http://localhost:5000/api/v1/events/", newEvent,{
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                withCredentials: true });
+    
+                
+                //refetch data
+
+                setSavingMarker(false);
+                setLoading(false);
+                //empty Dialog if someone wants to create new marker
+                newMarker.remove();
+                setNewMarkerData({
+                    title: "",
+                    description: "",
+                    coordinates: [],
+                    category: "personal"
+                    //creator will be provided with the api middleware
+                })
+                setOpen(false);
+    
+                navigate('/events/myevents');
+                
+            }catch(err){
+            console.log(err);
+            }
+
+            
+        
     }
 
     const handleClickOpen = () => {
@@ -337,7 +342,7 @@ export  const Map = () => {
             <div ref={mapContainer}  style={styles.mapContainer} />
             <Box sx={{position: "absolute", zIndex: "1", bottom: "5vh", right: "10vh"}}>
                 <LoadingButton
-                    onClick={addNewMarker}
+                    onClick={()=>{ user.loggedIn ? addNewMarker() : navigate('profile/signin') }}
                     startIcon={<AddLocationAltIcon fontSize="large"/>}
                     loading={loading}
                     loadingPosition="start"//otherwise end

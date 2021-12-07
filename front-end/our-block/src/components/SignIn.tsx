@@ -12,13 +12,11 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { NavLink, useNavigate} from 'react-router-dom';
-// import { useAppSelector } from '../app/hooks';
-// import {selectUser} from '../features/user/userSlice';
+import { useAppDispatch } from '../app/hooks';
+import {
+  login
+} from '../features/user/userSlice';
 import axios from 'axios';
-
-
-
-
 
 const SignIn = () => {
     const [form, setForm] = useState({
@@ -28,6 +26,7 @@ const SignIn = () => {
     
 
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -35,22 +34,29 @@ const SignIn = () => {
         // const data = new FormData(event.currentTarget);
         // eslint-disable-next-line no-console
         try{
-			const resp = await axios.post("http://localhost:5000/api/v1/users/login", form,{
-				headers: {
-				  'Content-Type': 'application/json'
-				},
-				 withCredentials: true });
+          const resp = await axios.post("http://localhost:5000/api/v1/users/login", form,{
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            withCredentials: true });
 
-			console.log(resp);
+            // console.log(resp);
 
-			//set user dispatch redux, 
+            //set user dispatch redux, 
+            dispatch(login({value: {loggedIn: true,
+              name: resp.data.name,
+              username: resp.data.username,
+              email: resp.data.email,
+              events: resp.data.events
+              }}));
 
-			navigate('/');
-		}catch(err){
-		  console.log(err);
-		}
-        
-    };
+            navigate('/');
+            
+        }catch(err){
+          console.log(err);
+        }
+              
+      };
 
 
 

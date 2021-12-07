@@ -21,19 +21,21 @@ router.post('/register-superadmin', async(req, res) => {
 })
 
 
-//users login route, user user
-router.post('/login-user', async(req, res) => {
-    await userLogin(req.body, 'user', res);
+//users login route, user user, email and password
+router.post('/login', async(req, res) => {
+    await userLogin(req.body, res);
 })
+
+//not really necessary
 //body containing username and password. could change for email if wanted.
-//Admin login route admin admin
-router.post('/login-admin', async(req, res) => {
-    await userLogin(req.body, 'admin', res);
-})
-//SuperAdmin login route superadmin superadmin
-router.post('/login-superadmin', async(req, res) => {
-    await userLogin(req.body, 'superadmin', res);
-})
+// //Admin login route admin admin
+// router.post('/login-admin', async(req, res) => {
+//     await userLogin(req.body, 'admin', res);
+// })
+// //SuperAdmin login route superadmin superadmin
+// router.post('/login-superadmin', async(req, res) => {
+//     await userLogin(req.body, 'superadmin', res);
+// })
 
 
 //profile route

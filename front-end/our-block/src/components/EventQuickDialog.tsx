@@ -47,8 +47,8 @@ export const EventQuickDialog:FC<Props> = ({open, onClose, eventData}) => {
                         <CardMedia
                             component="img"
                             height="174"
-                            image="https://cdn.pixabay.com/photo/2017/11/24/10/43/ticket-2974645_960_720.jpg"
-                            alt="Paella dish"
+                            image={eventData.url}
+                            alt="event image"
                         />
                         <CardContent>
                             <Typography variant="body2" color="text.secondary">

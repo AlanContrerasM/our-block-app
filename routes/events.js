@@ -19,7 +19,7 @@ router.get("/user/:id", events.findUserEvents);
 router.put("/:id", userAuth, events.update);
 
 // Delete an Event with id
-router.delete("/:id", events.delete);
+router.delete("/:id", userAuth, events.delete);
 
 // Delete all Events
 router.delete("/", events.deleteAll);

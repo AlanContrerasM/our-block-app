@@ -37,19 +37,15 @@ const Register = () => {
         // eslint-disable-next-line no-console
         try{
             if(form.password === confPassword){
-                const resp = await axios.post("http://localhost:5000/api/v1/users/register", form);
+                const resp = await axios.post("http://localhost:5000/api/v1/users/register-user", form);
                 console.log(resp.data);
-                navigate('/');
+                navigate('/profile/signin');
             }
         }catch(err){
         console.log(err);
         }
         
     };
-
-    async function register(){
-        
-    }
 
 
 
@@ -91,7 +87,7 @@ const Register = () => {
               label="UserName"
               name="username"
               autoComplete="username"
-              value={form.name}
+              value={form.username}
                 onChange={(e)=>setForm({...form, username: e.target.value})}
               
             />

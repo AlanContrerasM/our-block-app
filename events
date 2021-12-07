@@ -1,0 +1,226 @@
+[{
+  "_id": {
+    "$oid": "61af6ce62780a15c3acbf0c5"
+  },
+  "title": "Let's play volleyball",
+  "description": "suns out, guns out, lets do it",
+  "creator": {
+    "_id": {
+      "$oid": "61af56044c7c4b5b913f3d5e"
+    },
+    "username": "user"
+  },
+  "coordinates": [
+    -123.14304308548935,
+    49.28532751477425
+  ],
+  "url": "https://cdn.pixabay.com/photo/2014/10/22/17/25/stretching-498256__340.jpg",
+  "category": "sports",
+  "createdAt": {
+    "$date": "2021-12-07T14:17:10.184Z"
+  },
+  "updatedAt": {
+    "$date": "2021-12-07T14:17:10.184Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "61af74402780a15c3acbf0d3"
+  },
+  "title": "Lets go for a sail",
+  "description": "You, me, pinas coladas, the ocean breeze, and the implication",
+  "creator": {
+    "_id": {
+      "$oid": "61af56044c7c4b5b913f3d5e"
+    },
+    "username": "user"
+  },
+  "coordinates": [
+    -123.11749064021248,
+    49.290350392075226
+  ],
+  "url": "https://cdn.pixabay.com/photo/2016/05/24/18/49/suitcase-1412996__340.jpg",
+  "category": "personal",
+  "createdAt": {
+    "$date": "2021-12-07T14:48:32.988Z"
+  },
+  "updatedAt": {
+    "$date": "2021-12-07T14:48:32.988Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "61af74862780a15c3acbf0d8"
+  },
+  "title": "Sick kids donation run",
+  "description": "they are not sick as in ill, they are sick (rad, cool, youngsters lingo)",
+  "creator": {
+    "_id": {
+      "$oid": "61af56044c7c4b5b913f3d5e"
+    },
+    "username": "user"
+  },
+  "coordinates": [
+    -123.12935493347686,
+    49.28073678226403
+  ],
+  "url": "https://cdn.pixabay.com/photo/2019/10/06/10/03/team-4529717__340.jpg",
+  "category": "community",
+  "createdAt": {
+    "$date": "2021-12-07T14:49:42.904Z"
+  },
+  "updatedAt": {
+    "$date": "2021-12-07T14:49:42.904Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "61af74b02780a15c3acbf0dd"
+  },
+  "title": "Vancouver Festival",
+  "description": "Do crazy stuff!",
+  "creator": {
+    "_id": {
+      "$oid": "61af56044c7c4b5b913f3d5e"
+    },
+    "username": "user"
+  },
+  "coordinates": [
+    -123.1477409034735,
+    49.277996560237625
+  ],
+  "url": "https://cdn.pixabay.com/photo/2016/11/29/06/17/audience-1867754__340.jpg",
+  "category": "big-event",
+  "createdAt": {
+    "$date": "2021-12-07T14:50:24.685Z"
+  },
+  "updatedAt": {
+    "$date": "2021-12-07T14:50:24.685Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "61af75942780a15c3acbf0e9"
+  },
+  "title": "Ride the bull",
+  "description": "Yales bull is back, show who is the real cowboy",
+  "creator": {
+    "_id": {
+      "$oid": "61af56044c7c4b5b913f3d5e"
+    },
+    "username": "user"
+  },
+  "coordinates": [
+    -123.12124891888917,
+    49.276265825821355
+  ],
+  "url": "https://cdn.pixabay.com/photo/2016/12/10/06/17/singapore-1896764__340.jpg",
+  "category": "night-life",
+  "createdAt": {
+    "$date": "2021-12-07T14:54:12.482Z"
+  },
+  "updatedAt": {
+    "$date": "2021-12-07T14:54:12.482Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "61af77a62780a15c3acbf0f0"
+  },
+  "title": "Pickup Basketball",
+  "description": "come play,. tall, short, good, bad, no matter. you'll be destroyed",
+  "creator": {
+    "_id": {
+      "$oid": "61af56044c7c4b5b913f3d5e"
+    },
+    "username": "user"
+  },
+  "coordinates": [
+    -122.91289066626896,
+    49.20411662925031
+  ],
+  "url": "https://cdn.pixabay.com/photo/2014/10/22/17/25/stretching-498256__340.jpg",
+  "category": "sports",
+  "createdAt": {
+    "$date": "2021-12-07T15:03:02.548Z"
+  },
+  "updatedAt": {
+    "$date": "2021-12-07T15:03:02.548Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "61af77e72780a15c3acbf0f5"
+  },
+  "title": "Beers? anyone? am I the last one?",
+  "description": "seriously, I have a problem",
+  "creator": {
+    "_id": {
+      "$oid": "61af56044c7c4b5b913f3d5e"
+    },
+    "username": "user"
+  },
+  "coordinates": [
+    -122.90875160675427,
+    49.20162676528628
+  ],
+  "url": "https://cdn.pixabay.com/photo/2016/12/10/06/17/singapore-1896764__340.jpg",
+  "category": "night-life",
+  "createdAt": {
+    "$date": "2021-12-07T15:04:07.929Z"
+  },
+  "updatedAt": {
+    "$date": "2021-12-07T15:04:07.929Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "61af783b2780a15c3acbf0fa"
+  },
+  "title": "Let's go for a run",
+  "description": "you heard me dont be lazy",
+  "creator": {
+    "_id": {
+      "$oid": "61af56044c7c4b5b913f3d5e"
+    },
+    "username": "user"
+  },
+  "coordinates": [
+    -122.9126395778861,
+    49.2002419888278
+  ],
+  "url": "https://cdn.pixabay.com/photo/2014/10/22/17/25/stretching-498256__340.jpg",
+  "category": "sports",
+  "createdAt": {
+    "$date": "2021-12-07T15:05:31.498Z"
+  },
+  "updatedAt": {
+    "$date": "2021-12-07T15:05:31.498Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "61af96162780a15c3acbf113"
+  },
+  "title": "Lets hunt some coyote dawg!",
+  "description": "Those pests are attacking babies2! I''l attack their's too see if they like it!",
+  "creator": {
+    "_id": {
+      "$oid": "61af95d62780a15c3acbf10f"
+    },
+    "username": "user2"
+  },
+  "coordinates": [
+    -123.14309835393571,
+    49.29340232115979
+  ],
+  "url": "https://cdn.pixabay.com/photo/2019/10/06/10/03/team-4529717__340.jpg",
+  "category": "community",
+  "createdAt": {
+    "$date": "2021-12-07T17:12:54.998Z"
+  },
+  "updatedAt": {
+    "$date": "2021-12-07T17:59:28.842Z"
+  },
+  "__v": 0
+}]

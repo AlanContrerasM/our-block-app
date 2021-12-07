@@ -1,11 +1,11 @@
 const Event = require('../models/Event');
 const User = require('../models/User');
 
-// Create and Save a new Tutorial
+// Create and Save a new Event
 exports.create = async (req, res) => {
 
     try{
-        const {title, description, coordinates, category} = req.body;
+        const {title, description, coordinates, category, url} = req.body;
         // console.log(req.user);
         
         const newEvent = new Event({
@@ -13,7 +13,8 @@ exports.create = async (req, res) => {
             description,
             creator: {_id: req.user._id, username: req.user.username},
             coordinates,
-            category
+            category,
+            url
         });
 
         await newEvent.save();
@@ -38,7 +39,7 @@ exports.create = async (req, res) => {
     
 };
 
-// Retrieve all Tutorials from the database.
+// Retrieve all Events from the database.
 // "/"
 exports.findAll = async (req, res) => {
     try{
@@ -79,12 +80,22 @@ exports.findUserEvents = async (req, res) =>{
     }
 }
 
-// Find a single Tutorial with an id
-exports.findOne = (req, res) => {
+// Find a single Event with an id
+exports.findOne = async (req, res) => {
+    try{
+        const {id} = req.params;
+        const event = await Event.findOne({_id: id});
+        res.send(event);
+
+    }catch(err){
+        console.log(err);
+        res.status(400).send(err);
+
+    }
   
 };
 
-// Update a Tutorial by the id in the request
+// Update a Event by the id in the request
 exports.update = async (req, res) => {
 
     try{
@@ -100,7 +111,7 @@ exports.update = async (req, res) => {
         
         const updatedEvent = await Event.findByIdAndUpdate(id,
             {...req.body},
-            {runValidators: true, safe: true, new : true});
+            {runValidators: true, upsert: true, safe: true, new : true});
 
         return res.status(200).json({
             message: "Event was updated",
@@ -119,12 +130,33 @@ exports.update = async (req, res) => {
   
 };
 
-// Delete a Tutorial with the specified id in the request
-exports.delete = (req, res) => {
-  
+// Delete a Event with the specified id in the request
+exports.delete = async (req, res) => {
+    try{
+        
+        const {id} = req.params;
+
+        await User.updateOne(
+            { _id: req.user._id }, 
+            { $pull: { events: { _id: id } } },
+            {upsert: true, multi : true}
+        );
+
+        const event = await Event.deleteOne({_id: id});
+
+        return res.status(200).json({
+            message: "Event Deleted from user list and event database",
+            success: true,
+        });
+
+    }catch(err){
+        console.log(err);
+        res.status(400).send({err, message: "wrong request"});
+
+    }
 };
 
-// Delete all Tutorials from the database.
+// Delete all Events from the database.
 exports.deleteAll = (req, res) => {
   
 };
