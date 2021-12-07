@@ -324,6 +324,7 @@ export  const Map = () => {
     const handleClose = () => {
         setOpen(false);
         setOpenQuickDialog(false);
+        navigate('/events/myevents');
     };
     const handleCancel = () =>{
         setLoading(false);
